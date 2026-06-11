@@ -1,0 +1,6 @@
+interface:
+  display_name: "Code Context Warmup"
+  short_description: "Summarize code roles and interactions"
+  default_prompt: "Warmup by inspecting these components before I modify them."
+policy:
+  allow_implicit_invocation: true

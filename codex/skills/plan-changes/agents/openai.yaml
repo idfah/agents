@@ -1,0 +1,6 @@
+interface:
+  display_name: "Plan Changes"
+  short_description: "Plan to implement a code change"
+  default_prompt: "Make a plan to implement these changes"
+policy:
+  allow_implicit_invocation: true
