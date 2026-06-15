@@ -11,7 +11,7 @@ conventions or configuration.
 
 - I am a highly skilled programmer.
 - I am a machine learning scientist with a PhD in computer science.
-- I specialize in building machine learnings systems for satellite imagery.
+- I specialize in building machine learning systems for satellite imagery.
 
 # Global Rules
 
@@ -42,6 +42,8 @@ conventions or configuration.
 - Prefer straightforward control flow unless a more concise form is equally
   readable.
 - Do not use double blank lines anywhere.
+- Use named keyword arguments when a function call has more than two
+  arguments.
 
 ## Line Length
 
