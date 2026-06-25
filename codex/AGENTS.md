@@ -51,6 +51,7 @@ conventions or configuration.
 - Hard maximum line length is 100 characters.
 - Wrap lines as needed to stay within these limits.
 - Docstrings should wrap between 80-90 characters.
+- URLs and links may exceed the line length limits.
 
 ## String Style
 
@@ -184,6 +185,12 @@ Example:
 - Use @staticmethod when appropriate.
 - Use @classmethod for additional initializer methods.
 
+# Documentation
+
+- Check `docs/` for relevant design and usage context before changing public behavior, config formats, or architecture.
+- Keep public docs aligned with code changes when contracts, examples, or user-facing patterns change.
+- Prefer documented conventions over inferring new patterns from isolated code.
+
 # Preferred Libraries
 
 - Prefer: NumPy, SciPy, PyTorch, Rasterio, Scikit-Image, Fiona, Shapely,
@@ -203,7 +210,7 @@ Example:
   functions.
 - Prefer names like `foo`, `bar`, `baz` and `boo` for artificial, nonsense
   string arguments.
-- Always run pylint.
+- Always run pylint on modified python code.
 - Unit tests may disable pylint warnings where appropriate.
 - Stop and ask before disabling pylint warning or working around pylint
   warnings in core code.
