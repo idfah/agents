@@ -1,7 +1,7 @@
 name = "sw_developer"
 description = "Software developer - the caller's perspective"
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
+model = "gpt-5.5"
+model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 
 developer_instructions = """

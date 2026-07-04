@@ -1,6 +1,6 @@
 name = "repo_maintainer"
 description = "Core maintainer and advocate."
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

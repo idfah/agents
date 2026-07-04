@@ -1,6 +1,6 @@
 name = "sw_architect"
 description = "Software architect and designer"
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 sandbox_mode = "read-only"
 

@@ -1,7 +1,7 @@
 name = "sw_tester"
 description = "Software testing expert"
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
+model = "gpt-5.5"
+model_reasoning_effort = "high"
 
 developer_instructions = """
 Act as software testing expert and focus narrowly on how functionality is

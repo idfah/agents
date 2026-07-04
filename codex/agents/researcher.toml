@@ -1,6 +1,6 @@
 name = "researcher"
 description = "Researcher who specializes in alignment with external resources, open-source projects, standards, best-practices and scientific publications"
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
