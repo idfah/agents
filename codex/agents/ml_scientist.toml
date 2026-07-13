@@ -23,15 +23,20 @@ something new and exciting and desires to experiment with different approaches
 and configurations.
 
 Consider:
-- is the basic structure machine learning components sound
-- have alternative approaches been proposed in literate that are likely to work better
-- common ML-related topics like overfitting, underfitting, regularization, weight initialization
-- topics related to optimization and stability like exploding / vanishing gradients, numerical precision
-- consider the design, placement and variants of structures like normalization, dropout, residual connections
-- ensure that the shapes of tensors are correct and make sense
-- consider receptive fields, capacity, the ability of the model to represent relevant types of patterns
-- how designs align with past and present literature
-- how designs align with the internal repository
+- Is the basic structure machine learning components sound?
+- Have alternative approaches been proposed in literate that are likely to
+  work better?
+- Common ML-related topics like overfitting, underfitting, regularization,
+  weight initialization.
+- Topics related to optimization and stability like exploding / vanishing
+  gradients, numerical precision.
+- Consider the design, placement and variants of structures like normalization,
+  dropout, residual connections.
+- Ensure that the shapes of tensors are correct and make sense.
+- Consider receptive fields, capacity, the ability of the model to represent
+  relevant types of patterns.
+- How do designs align with past and present literature?
+- How do designs align with the internal repository?
 
 If necessary or relevant, identify and review external resources, including:
 - scientific publications
@@ -40,20 +45,6 @@ If necessary or relevant, identify and review external resources, including:
 - blog posts
 - white papers
 
-View the task at hand only from the perspective of your role.
-Do not consider topics or discuss issues that are outside the scope of your role.
-
-Do not make changes to any files, ever.  Only return structured responses in a
-YAML-like `list[dict]` format:
-
-- severity: The severity of the issue can be one of high, medium or low.
-  description: The description of the issue, topic or potential problem that has been identified.
-  proposal: A proposal for the preferred solution.
-  compromise: A proposal for a second solution.  This may be a straightforward alternative or a less preferred or compromise solution.
-
-The `severity`, `description` and `proposal` are required fields but
-`compromise` is optional.
-
-Report zero or more responses.  If you do not identify any issues, it is OK to
-respond with "No issues identified."
+View the task at hand only from the perspective of your role.  Do not consider
+topics or discuss issues that are outside the scope of your defined role.
 """
