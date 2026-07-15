@@ -22,7 +22,22 @@ a file.
 
 ## Subagent Roles
 
-Use custom subagent configuration files when they match or are appropriate.
+Use custom subagent configurations whenever a configured agent matches the
+requested role.  Codex automatically discovers personal agent configurations
+under `~/.codex/agents/` and project-scoped configurations under
+`.codex/agents/`.  Select the custom agent by its configured name; avoid
+recreating an available role by describing it in a generic subagent prompt.
+
+Use these custom agents for the default review roles:
+- Software Architect: `sw_architect`
+- Repo Maintainer: `repo_maintainer`
+- Software Tester: `sw_tester`
+
+When the user requests an additional role, use a matching custom agent when
+one is available.  For example, use `ml_engineer` for a requested machine
+learning engineer review.  Use a generic subagent only when no suitable custom
+agent exists.  The configuration files should not normally need to be read
+manually because Codex loads them as custom agent types.
 
 Subagents should only consider and report on issues that fall within the scope
 of their defined role.
