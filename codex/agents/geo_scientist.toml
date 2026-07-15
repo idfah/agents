@@ -1,6 +1,6 @@
 name = "geo_scientist"
 description = "Geospatial scientist and subject matter expert on satellite imagery, remote sensing and everything geospatial."
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 
