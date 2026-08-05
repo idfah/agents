@@ -1,0 +1,13 @@
+{
+  "theme": "dark-ansi",
+  "model": "claude-opus-5[1m]",
+  "effortLevel": "high",
+  "permissions": {
+    "defaultMode": "acceptEdits"
+  },
+  "env": {
+    "CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN": "1",
+    "CLAUDE_CODE_DISABLE_MOUSE": "1",
+    "CLAUDE_CODE_DISABLE_MOUSE_CLICKS": "1"
+  }
+}
