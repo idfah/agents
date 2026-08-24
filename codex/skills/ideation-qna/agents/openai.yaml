@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ideation Q&A"
+  short_description: "Refine a topic through sequential questions"
+  default_prompt: "Use $ideation-qna to play Q&A and refine this topic."
+policy:
+  allow_implicit_invocation: true
