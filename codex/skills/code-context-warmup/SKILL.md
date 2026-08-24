@@ -9,10 +9,16 @@ Inspect and summarize the requested material.  The goal of this process is to
 build a working context around code or other material that will be the
 subject of subsequent discussion, implementation, refactors or other changes.
 
+Build enough context to support the subsequent discussion, but do not propose
+or plan changes unless requested.
+
+If invoked without any specific target, warm up on the components that are the
+current subject of the conversation, or on the current working changeset when
+there is no other context.
 
 ## Instructions
 
-Inspect the coder or other material in order to explain, describe and summarize:
+Inspect the code or other material in order to explain, describe and summarize:
 
 - What these components do and what is their purpose at a high level.
 - Why they appear to exist.
@@ -24,9 +30,8 @@ Inspect the coder or other material in order to explain, describe and summarize:
 - Overall behavior, design and intent.
 - High-level architecture and interaction.
 
-At the end of the summary, include a brief list of questions describing aspects
-of the code or other material that cannot be clearly inferred or that might
-seem ambiguous.
+At the end of the summary, include any important questions about aspects of the
+code or other material that cannot be clearly inferred or that seem ambiguous.
 
 ## Rules
 

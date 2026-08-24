@@ -23,6 +23,11 @@ Before generating a plan consider the following:
 - Think about how the requested changes fit and align with the rest of the
   respository.
 
+Before generating the plan, identify any unresolved questions or ambiguities
+that could materially affect it.  Discuss these with the user first, preferably
+together in a concise conversational form.  Delay the full plan until they are
+resolved or the user asks you to proceed using stated assumptions.
+
 ## Make A Plan
 
 The plan should contain of a step-by-step list of items to be done in order
