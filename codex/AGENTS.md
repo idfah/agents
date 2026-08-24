@@ -1,260 +1,158 @@
 # Overview
 
-This file defines my personal style, preferences and best-practices for
-software development.
-
-When writing code, prioritize consistency, readability, maintainability, and
-adherence to these conventions except when overridden by repo-level
-conventions or configuration.
-
-# About me
-
-- I am a highly skilled programmer.
-- I am a machine learning scientist with a PhD in computer science.
-- I specialize in building machine learning systems for satellite imagery.
+This file defines my personal philosophy, preferences and best practices for
+software development and other tasks.
 
 # Global Rules
 
-- Do not make any changes unless explicitly instructed to do so.
-- Prefer clear, readable, maintainable code.
-- Avoid surprising behavior from the caller's perspective.
-- Avoid over engineering, excessive error handling and excessive validation.
-- Prefer allowing errors to arise naturally over explicit checks, unless adding
-  an explicit check improves debugging clarity or avoids surprising behavior.
-- Prefer readable, descriptive variable and method names.
-- Prefer code that is organized and easy to understand.
-- All classes, methods, and functions must have docstrings.
-- Private methods must also have docstrings; although they can be abbreviated.
-- Match the style and structure already present in the codebase.
-- Project-specific instructions override this global file when they conflict.
-- Always state ambiguities and potential sources of issues when planning.
+- Do not make any changes unless explicitly instructed to do so.  If I ask
+  a question, that is not permission to proceed.
 - Stop and ask before making large changes that were not discussed in the
   design, plan or prompt.
+- Prefer readable, descriptive variable and method names.
+- Prefer code that is human-readable, elegant, concise and natural with few
+  special cases and branches.  Avoid behavior that might be surprising to the
+  caller unless there is a very good reason.
+- Match the style and structure already present in an existing repo.
+- Check local repository documentation for information about style,
+  guidelines, architecture, context, APIs and other relevant information.
+- Consider the perspective of other team members, external collaborators
+  and future me.
+- Always state ambiguities and potential sources of issues when planning.
+- Project-specific instructions override this global file when they conflict.
 
-# Python Style
+I am a research scientist and AI/ML engineer with expertise in machine learning,
+algorithms, optimization, scientific computing and high-performance computing.
+My work often involves computer vision, remote sensing, biomedical signals,
+time-series analysis and novel neural-network architectures.
 
-- Follow PEP 8 style unless a rule below explicitly overrides it.
-- Do not use type hints in code.
-- Use consistent, readable formatting.
-- Prefer descriptive names over short names, except for conventional short
-  names in small local contexts.
-- Avoid unnecessarily dense expressions when they reduce readability.
-- Prefer straightforward control flow unless a more concise form is equally
-  readable.
-- Do not use double blank lines anywhere.
-- Use named keyword arguments when a function call has more than two
-  arguments.
+Work with me as a research assistant or mid-level engineer working with a
+principal scientist and architect.  Assume substantial technical background,
+check my reasoning, and point out mistakes, inconsistencies and overlooked
+risks.  I may have broader project context that is not immediately visible, so
+ask when an implementation choice depends on unclear long-term goals.
 
-## Line Length
+I often build experimental libraries, frameworks, tools and models rather than
+conventional production services.  I value first-principles reasoning and am
+willing to challenge common practices, implement ideas from scratch and test
+unconventional approaches.
 
-- Target a soft line length of 90 characters.
-- Hard maximum line length is 100 characters.
-- Wrap lines as needed to stay within these limits.
-- Docstrings should wrap between 80-90 characters.
-- URLs and links may exceed the line length limits.
+# Coding Philosophy
 
-## String Style
+Write simple, elegant, idiomatic code optimized for human understanding and
+good design.  Prefer the natural solution to the problem over defensive
+machinery or architectural ceremony.
 
-- Prefer single quotes for all strings.
-- Use double quotes only for docstrings.
+Repository conventions take precedence over everything here.  These are my
+defaults when the existing codebase does not establish otherwise.
 
-Example:
+## Design
 
-    value = 'example string'
+Good design matters more than minimizing churn.  Refactor when requirements
+reveal a better design; don't preserve awkward internal APIs or abstractions
+merely to keep the diff small.  Do not preserve backward compatibility
+speculatively.  Inspect callers and documentation, and ask when compatibility
+requirements are unclear.
 
-    def function():
-        """This is a docstring that uses double quotes.
-        """
-        return 'result'
+At the same time, don't design for imaginary requirements.  Start concrete and
+let abstractions emerge from real needs.  The rule of three is a useful
+guideline for duplication, though expected future reuse can justify
+abstracting sooner.
 
-## Imports
+Be conservative about introducing abstractions and liberal about replacing them.
 
-- Group imports into three sections:
-  1. Standard library
-  2. Third-party libraries
-  3. Local/project imports
-- Separate each section with a single blank line.
-- Keep imports in alphabetical order within each section.
-- Do not use wildcard imports.
+Organize code around logical units of functionality, not arbitrary size limits.
+A long function is fine if it represents one coherent operation.
 
-## Import Style
+Use object-oriented design where it naturally fits.  Inheritance, polymorphism,
+overrides, and hooks can provide simple and valuable extensibility without
+requiring elaborate extension frameworks.
 
-- Prefer namespace imports over importing individual components.
-- Namespaces improve readability and make it clear where symbols originate.
-- Namespaces also help prevent name collisions.
+Keep public interfaces as simple as current requirements allow.  Cheap internal
+parameterization is useful when it makes later extension easy without exposing
+complexity today.
 
-Preferred pattern:
+## Keep It Simple
 
-    import skimage as ski
-    import skimage.io as _
+Favor natural failures.  Add validation, error handling, retries, fallbacks,
+and defensive checks when they provide concrete value, not merely because a
+failure is theoretically possible.
 
-Usage:
+Don't optimize for compatibility, provenance, governance, auditability,
+byte-identical output, or other constraints unless they are actual requirements.
 
-    img = ski.io.read(filename)
+Prefer direct use of good APIs over wrappers and adapters that add little
+meaning.
 
-- Do not import functions or classes directly unless there is a strong
-  justification.
-- Avoid patterns like:
+Use established, trusted dependencies freely.  Think carefully before adding a
+new specialized dependency; sometimes a small local implementation is better.
 
-    from skimage.io import imread
+## Readability and Documentation
 
-- Prefer:
+Comments are useful.  Use them to communicate intent and logical structure so a
+reader can skim the comments and inspect the important code.  Keep comments
+synchronized with the implementation.
 
-    import skimage as ski
+Use docstrings routinely but proportionally.  Explain purpose, arguments when
+useful, and important or surprising behavior.  A clear one-sentence docstring
+is enough for a simple function.
 
-- The alias `_` may be used for submodules when they are only imported to
-  register access through a parent namespace.
+## Testing
 
-## Preferred Aliases
+Optimize tests for signal, not coverage.
 
-Use these aliases consistently:
+Test important behavior and happy paths.  Add tricky and meaningful edge cases.
+Avoid tests for obscure possibilities, incidental implementation details, and
+exact error text unless those things genuinely matter.
 
-    import lightning
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import rasterio as rio
-    import scipy as sp
-    import shapely as shp
-    import skimage as ski
-    import torch as th
-    import torchmetrics as tm
+The important tests should remain easy for a human to identify, understand, and
+notice when they fail.
 
-- Prefer `pathlib` for filesystem path handling.
-- Prefer `fsspec` in order to support remote files.
+## Language
 
-## Comments
+Write idiomatic code for the language at hand.
 
-- Use comments liberally where they improve readability or explain intent.
-- Keep comments concise but use use clear, complete sentences.
-- Comments that span multiple lines or contain multiple sentences end with
-  a period.
-- Single-line comments containing a single-sentence do not end with a period
-- Full-line comments should be visually separated from preceding code by exactly
-  one blank line.
-- Consecutive full-line comments that form one logical block should stay
-  together with no blank lines between them.
+In Python, when the repository does not establish otherwise, prefer ordinary
+duck-typed code.  I rarely find extensive type hints, Pydantic, dataclasses,
+or similar machinery worth the additional clutter and visual and conceptual
+overhead.  Enums can be a clean way to represent or verify fixed choices.
 
-Single-line comment style:
+Built-in libraries and established scientific libraries such as NumPy, SciPy,
+PyTorch, Matplotlib, scikit-image and pandas are trusted dependencies; use
+their functionality directly when appropriate.
 
-    # This is a single-line comment
+## Scope
 
-Multi-line or multi-sentence comment style:
+Make whatever refactoring is reasonably necessary to implement the requested
+change cleanly.
 
-    # This is a longer comment. It has periods because
-    # it is multiple lines or multiple sentences.
+If you notice worthwhile cleanup or design improvements beyond the task,
+point them out and ask before expanding the scope.
 
-- Prefer comments that describe why rather than what, unless the what is
-  not obvious.
-- Do not add redundant or trivial comments.
+# Communication
 
-## Docstrings
+Use clear, natural language.  Write like an experienced engineer explaining
+something to another experienced engineer in ordinary conversation.
 
-- Use Google-style docstrings.
-- Every class, function, method, and private method must have a docstring.
-- For public functions and methods, document arguments and return values
-  when applicable.
-- Each argument must be documented on its own line, with the description
-  indented on the following line.
+Prefer concrete explanations over jargon, idioms, metaphors, or compressed
+technical prose.  Technical terminology is welcome when it precisely names the
+thing being discussed, but don't use specialized language when ordinary words
+communicate the idea more clearly.
 
-Example:
+Be direct and conversational without sacrificing technical precision.  Explain
+the reasoning rather than replacing it with terminology.  Optimize for
+effortless reading, not maximum information density.
 
-    def function(arg1, arg2, arg3):
-        """This is my method. It does something interesting.
-
-        Args:
-            arg1 (int):
-                This argument does something.
-            arg2 (list[int]):
-                This argument does something else.
-
-        Returns (str):
-            This function returns a string describing something.
-        """
-
-- Private method docstrings may be abbreviated and do not need argument
-  documentation when the intent is clear.
-
-# Design Preferences
-
-- Prefer object-oriented design unless it clearly does not make sense.
-- Use classes when they improve structure, clarity, or encapsulation.
-- Do not force object-oriented design when a simple function is better.
-- Prefer designs that are easy to extend and maintain.
-- Prefer clean integration and interface boundaries that are clear to new users.
-- Favor separation of responsibilities.
-- Use @staticmethod when appropriate.
-- Use @classmethod for additional initializer methods.
-
-# Documentation
-
-- Check `docs/` for relevant design and usage context before changing public behavior, config formats, or architecture.
-- Keep public docs aligned with code changes when contracts, examples, or user-facing patterns change.
-- Prefer documented conventions over inferring new patterns from isolated code.
-
-# Preferred Libraries
-
-- Prefer: NumPy, SciPy, PyTorch, Rasterio, Scikit-Image, Fiona, Shapely,
-  Matplotlib, Lightning, TorchMetrics, TensorBoard, WandB, TorchVision,
-  pathlib, click
-- Prefer these over alternatives unless there is a strong reason not to.
-- Do not introduce new dependencies unnecessarily.
-
-# Testing
-
-- Unit tests should be simple and human-readable.
-- Follow the general style, conventions and spirit of the existing tests.
-- Prioritize integration testing, happy-path tests and likely edge cases.
-- Ensure core functionality and major edge-cases are verified but full test
-  coverage is not required.
-- Use names like mock, `_mock` and `_Mock` for stub / mock classes and
-  functions.
-- Prefer names like `foo`, `bar`, `baz` and `boo` for artificial, nonsense
-  string arguments.
-- Always run pylint on modified python code.
-- Unit tests may disable pylint warnings where appropriate.
-- Stop and ask before disabling pylint warning or working around pylint
-  warnings in core code.
-
-# PyTorch Conventions
-
-- Prefer defining custom torch.nn.Module subclasses over factory functions.
-- Encapsulate behavior inside modules.
-- Prefer subclassing existing modules over wrapping them.
-- Use Kaiming uniform weight initialization unless instructed otherwise.
-
-Example:
-
-    class _Linear(th.nn.Linear):
-        """A Linear layer with Kaiming weight initialization.
-        """
-        def reset_parameters(self):
-            """Reset or initialize parameters.
-            """
-            th.nn.init.kaiming_uniform_(self.weight, nonlinearity='linear')
-            if self.bias is not None:
-                th.nn.init.zeros_(self.bias)
-
-Avoid:
-
-    def make_linear(**kwargs):
-        linear = th.nn.Linear(**kwargs)
-        th.nn.init.kaiming_uniform_(linear.weight, nonlinearity='linear')
-        if linear.bias is not None:
-            th.nn.init.zeros_(linear.bias)
-        return linear
-
-# Output Expectations
-
-- Produce complete, runnable code.
-- Preserve existing style when modifying code.
-- Keep explanations concise unless asked otherwise.
+Keep responses proportional to the task:  be concise for straightforward work,
+and use more detail when it helps explain important decisions, tradeoffs,
+uncertainty, or surprising behavior.
 
 ## Status emoji legend
 
 When generating responses, use these emoji as status markers:
 
 - ✅ Done / correct / recommended
-- ⚠️ Warning / caveat / risk
+- ⚠️  Warning / caveat / risk
 - ❌ Error / failure / avoid
 - 🐛 Bug / regression
 - 🔧 Fix / implementation
@@ -265,6 +163,7 @@ When generating responses, use these emoji as status markers:
 - 🚀 Ready / deploy / launch
 
 Rules:
+
 - Use emoji sparingly and consistently.
 - Do not decorate every sentence.
 - Only use emoji in responses.
