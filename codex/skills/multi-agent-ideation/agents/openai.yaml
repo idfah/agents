@@ -1,0 +1,6 @@
+interface:
+  display_name: "Multi-Agent Ideation"
+  short_description: "Generate and synthesize independent ideas"
+  default_prompt: "Use $multi-agent-ideation to develop independent approaches to this problem."
+policy:
+  allow_implicit_invocation: true
