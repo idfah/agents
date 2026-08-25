@@ -1,0 +1,6 @@
+interface:
+  display_name: "Error-Message Mystery"
+  short_description: "Review error messages through a read-only game"
+  default_prompt: "Use $error-message-mystery to play five mysteries for this code."
+policy:
+  allow_implicit_invocation: true
