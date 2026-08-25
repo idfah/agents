@@ -1,19 +1,19 @@
 ---
-name: multi-agent-code-review
-description: Use multiple subagents to perform an in-depth code review.  Use
-  only when asked to perform a multi-agent code review.
+name: multi-agent-review
+description: Use multiple subagents to perform an in-depth review.  Use only
+  when asked to perform a multi-agent review.
 ---
 
-# Multi-Agent Code Review
+# Multi-Agent Review
 
-Use multiple agents to perform a detailed, in-depth code review.  Multiple
-subagents will perform narrowly scoped reviews and the top level agent
+Use multiple agents to perform a detailed, in-depth review.  Multiple
+subagents will perform narrowly scoped reviews and the top-level agent
 will collate and summarize their responses.
 
 ## Instructions
 
-Review the requested changes using multiple subagents.  The top-level agent
-will perform a comprehensive review while the sub-agents perform narrowly
+Use multiple subagents to review the requested target.  The top-level agent
+will perform a comprehensive review while the subagents perform narrowly
 scoped, individual reviews.  The top-level agent will then collate and
 summarize all information into a final review.  Do not make changes to any
 files; this is a review only.  The only possible exception to this rule is
@@ -45,14 +45,14 @@ of their defined role.
 The default subagent roles are:
 - Software Architect is focused only on high-level design and architecture.
 - Repo Maintainer is focused on ensuring that the changes align with and follow
-  the conventions, style, best-practices, interfaces and overall design and
+  the conventions, style, best practices, interfaces and overall design and
   spirit of the existing codebase.
 - Software Tester is focused only on ensuring that software tests are accurate,
   valid, comprehensive and correct.  Tester is also focused on alignment of the
   tests with the repo test suite, including general scope and completeness of
   the new tests with respect to existing tests.
 
-Different and or additional agents may be used when requested.
+Different or additional agents may be used when requested.
 
 ## Subagent Structure
 
@@ -79,8 +79,8 @@ findings.  Then, the top-level agent should generate a summary report in the
 form of an ordered list from highest severity to lowest severity.  The list
 may also be grouped logically if it is appropriate or if the list is long.
 
-The top-level agent should also make suggestions regarding which issues should
-likely be addressed and which issues we might want to ignore or disregard.
+The top-level agent should also suggest which findings warrant action and which
+do not.
 
 If requested, the top-level agent may write a checklist of the findings to
 a file for later evaluation.

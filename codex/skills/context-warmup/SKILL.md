@@ -1,9 +1,12 @@
 ---
-name: code-context-warmup
-description: Inspect, analyze and summarize code components to build working context before making changes.  Use when asked to warmup by inspecting or analyzing code.  Only trigger when the word "warmup" is explicitly mentioned.
+name: context-warmup
+description: Inspect, analyze and summarize a topic or source material to build
+  working context before subsequent work.  Use when asked to warmup on code,
+  documents, designs, plans or other material.  Only trigger when the word
+  "warmup" is explicitly mentioned.
 ---
 
-# Code Context Warmup
+# Context Warmup
 
 Inspect and summarize the requested material.  The goal of this process is to
 build a working context around code or other material that will be the

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Context Warmup"
+  short_description: "Build context before discussion or changes"
+  default_prompt: "Use $context-warmup to inspect this material before working on it."
+policy:
+  allow_implicit_invocation: true

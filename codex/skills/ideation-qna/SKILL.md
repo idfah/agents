@@ -48,8 +48,12 @@ Treat each numbered question as an open discussion, not a single exchange.
   user is ready to continue.  Err toward waiting rather than advancing too
   early.
 - Do not require a readiness check after an answer that is abundantly clear.
-- Follow natural-language requests to skip, revisit, stop or add questions.
-  If the user stops early, synthesize the discussion completed so far.
+- Follow natural-language requests to skip, revisit, stop or add questions.  A
+  skip consumes the current question, revisiting does not change the count and
+  adding questions increases N.
+- If the user stops early, synthesize the discussion completed so far.  Do not
+  continue to a downstream task unless the user indicates that only the Q&A
+  should stop.  Ask when the intended scope of "stop" is unclear.
 
 ## Synthesize And Continue
 
@@ -61,7 +65,9 @@ explain what they mean and preserve material uncertainty or unresolved issues.
 If the original request includes a downstream task:
 
 - Print the synthesis before beginning that task.
-- Proceed directly to the downstream task without another confirmation.
+- Begin the requested downstream task without adding a Q&A-specific
+  confirmation.  Follow that task's own clarification, approval and safety
+  requirements.
 - Use the synthesis and full discussion as context for the downstream work.
 - Do not let this skill broaden the actions authorized by the original request.
 

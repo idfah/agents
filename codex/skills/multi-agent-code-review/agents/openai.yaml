@@ -1,6 +1,0 @@
-interface:
-  display_name: "Multi-Agent Code Review"
-  short_description: "Perform an in-depth, multi-agent code review"
-  default_prompt: "Review the current changeset using a multi-agent code review"
-policy:
-  allow_implicit_invocation: true
