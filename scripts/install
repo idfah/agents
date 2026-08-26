@@ -1,0 +1,354 @@
+#!/usr/bin/env python3
+"""Install the repository's Codex or Claude configuration.
+"""
+import json
+import pathlib
+import shutil
+import tomllib
+
+import click
+import yaml
+
+repository_root = pathlib.Path(__file__).resolve().parents[1]
+targets = {
+    'claude': {
+        'config': ('claude/settings.json', 'settings.json'),
+        'home': '.claude',
+        'instructions': ('claude/CLAUDE.md', 'CLAUDE.md'),
+        'subagent_suffix': '.md',
+    },
+    'codex': {
+        'config': ('codex/config.toml', 'config.toml'),
+        'home': '.codex',
+        'instructions': ('codex/AGENTS.md', 'AGENTS.md'),
+        'subagent_suffix': '.toml',
+    },
+}
+
+def require_string_fields(source, metadata, fields):
+    """Require string values in a subagent metadata mapping.
+
+    Args:
+        source (pathlib.Path):
+            Canonical subagent Markdown file.
+        metadata (dict):
+            Subagent frontmatter mapping.
+        fields (tuple[str, ...]):
+            Names of required string fields.
+    """
+    for field in fields:
+        if not isinstance(metadata.get(field), str):
+            raise ValueError(f'`{source}` has no string `{field}`.')
+
+def validate_subagent(source, metadata, body):
+    """Validate one canonical subagent definition.
+
+    Args:
+        source (pathlib.Path):
+            Canonical subagent Markdown file.
+        metadata (dict):
+            Subagent frontmatter mapping.
+        body (str):
+            Subagent instruction body.
+    """
+    # Validate common subagent metadata
+    if metadata.get('name') != source.stem:
+        raise ValueError(f'`{source}` name must match its filename.')
+
+    require_string_fields(source, metadata, ('description',))
+    for tool in ('claude', 'codex'):
+        if not isinstance(metadata.get(tool), dict):
+            raise ValueError(f'`{source}` has no `{tool}` mapping.')
+
+    # Validate tool-specific metadata
+    require_string_fields(source, metadata['claude'], ('model', 'effort'))
+    require_string_fields(source, metadata['codex'], ('model', 'reasoning_effort'))
+
+    if not isinstance(metadata['claude'].get('tools'), list):
+        raise ValueError(f'`{source}` has no `claude.tools` list.')
+
+    if metadata['codex'].get('sandbox_mode') != 'read-only':
+        raise ValueError(f'`{source}` must use a read-only Codex sandbox.')
+
+    if not body.strip():
+        raise ValueError(f'`{source}` has no instruction body.')
+
+def read_subagent(source):
+    """Read one canonical subagent definition.
+
+    Args:
+        source (pathlib.Path):
+            Canonical subagent Markdown file.
+
+    Returns (tuple[dict, str]):
+        The frontmatter mapping and instruction body.
+    """
+    # Separate the YAML frontmatter from the shared instructions
+    text = source.read_text()
+
+    if not text.startswith('---\n'):
+        raise ValueError(f'`{source}` does not start with YAML frontmatter.')
+
+    try:
+        frontmatter, body = text[4:].split('\n---\n', maxsplit=1)
+    except ValueError as ex:
+        raise ValueError(f'`{source}` has no closing frontmatter delimiter.') from ex
+
+    # Parse and validate the canonical metadata
+    metadata = yaml.safe_load(frontmatter)
+    if not isinstance(metadata, dict):
+        raise ValueError(f'`{source}` frontmatter must be a mapping.')
+
+    validate_subagent(source, metadata, body)
+
+    return metadata, body.strip()
+
+def render_claude_subagent(metadata, body):
+    """Render one canonical subagent for Claude.
+
+    Args:
+        metadata (dict):
+            Canonical subagent frontmatter.
+        body (str):
+            Canonical subagent instructions.
+
+    Returns (str):
+        Claude-native Markdown configuration.
+    """
+    claude_metadata = {
+        'name': metadata['name'],
+        'description': metadata['description'],
+        'tools': ', '.join(metadata['claude']['tools']),
+        'model': metadata['claude']['model'],
+        'effort': metadata['claude']['effort'],
+    }
+    frontmatter = yaml.safe_dump(
+        claude_metadata,
+        allow_unicode=True,
+        sort_keys=False,
+        width=90,
+    ).rstrip()
+
+    return f'---\n{frontmatter}\n---\n\n{body}\n'
+
+def render_codex_subagent(metadata, body):
+    """Render one canonical subagent for Codex.
+
+    Args:
+        metadata (dict):
+            Canonical subagent frontmatter.
+        body (str):
+            Canonical subagent instructions.
+
+    Returns (str):
+        Codex-native TOML configuration.
+    """
+    # TOML uses a literal multiline string for shared instructions
+    if "'''" in body:
+        raise ValueError('Subagent instructions cannot contain three single quotes.')
+
+    codex_metadata = metadata['codex']
+    values = {
+        'name': metadata['name'],
+        'description': metadata['description'],
+        'model': codex_metadata['model'],
+        'model_reasoning_effort': codex_metadata['reasoning_effort'],
+        'sandbox_mode': codex_metadata['sandbox_mode'],
+    }
+    lines = [f'{key} = {json.dumps(value)}' for key, value in values.items()]
+    lines.extend([
+        "developer_instructions = '''",
+        body,
+        "'''",
+    ])
+
+    # Validate the generated native configuration before installation
+    rendered = '\n'.join(lines) + '\n'
+    tomllib.loads(rendered)
+
+    return rendered
+
+def report_action(action, destination, note=None):
+    """Report one planned or completed installation action.
+
+    Args:
+        action (str):
+            Name of the action being taken.
+        destination (pathlib.Path):
+            Installation destination.
+        note (str):
+            Optional explanation of the action.
+    """
+    detail = f' ({note})' if note else ''
+    click.echo(f'{action:9} {destination}{detail}')
+
+def copy_file(source, destination, dry_run):
+    """Copy one managed source file.
+
+    Args:
+        source (pathlib.Path):
+            Source file in this repository.
+        destination (pathlib.Path):
+            Installation destination.
+        dry_run (bool):
+            Whether to report without writing.
+    """
+    # A matching destination needs no work and should not be reported as a change
+    if destination.exists() and destination.read_bytes() == source.read_bytes():
+        report_action('unchanged', destination)
+        return
+
+    report_action('replace' if destination.exists() else 'create', destination)
+
+    if not dry_run:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+
+def write_file(content, destination, dry_run):
+    """Write one generated managed file.
+
+    Args:
+        content (str):
+            Generated file content.
+        destination (pathlib.Path):
+            Installation destination.
+        dry_run (bool):
+            Whether to report without writing.
+    """
+    # A matching destination needs no work and should not be reported as a change
+    if destination.exists() and destination.read_text() == content:
+        report_action('unchanged', destination)
+        return
+
+    report_action('replace' if destination.exists() else 'create', destination)
+
+    if not dry_run:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(content)
+
+def install_skills(target, destination_root, dry_run):
+    """Install all shared skills for one coding tool.
+
+    Args:
+        target (str):
+            Coding tool name.
+        destination_root (pathlib.Path):
+            Tool configuration directory.
+        dry_run (bool):
+            Whether to report without writing.
+    """
+    for skill_directory in sorted((repository_root / 'skills').iterdir()):
+        if not skill_directory.is_dir():
+            continue
+
+        for source in sorted(skill_directory.rglob('*')):
+            if not source.is_file():
+                continue
+
+            relative_path = source.relative_to(skill_directory)
+
+            # Claude does not use Codex skill metadata
+            if target == 'claude' and relative_path == pathlib.Path('agents/openai.yaml'):
+                continue
+
+            destination = destination_root / 'skills' / skill_directory.name / relative_path
+            copy_file(source, destination, dry_run)
+
+def install_subagents(target, target_config, destination_root, dry_run):
+    """Render and install all subagents for one coding tool.
+
+    Args:
+        target (str):
+            Coding tool name.
+        target_config (dict):
+            Native target configuration.
+        destination_root (pathlib.Path):
+            Tool configuration directory.
+        dry_run (bool):
+            Whether to report without writing.
+    """
+    for source in sorted((repository_root / 'subagents').glob('*.md')):
+        metadata, body = read_subagent(source)
+
+        if target == 'claude':
+            content = render_claude_subagent(metadata, body)
+        else:
+            content = render_codex_subagent(metadata, body)
+
+        suffix = target_config['subagent_suffix']
+        destination = destination_root / 'agents' / f'{source.stem}{suffix}'
+        write_file(content, destination, dry_run)
+
+def install_config(source, destination, force, dry_run):
+    """Install one main configuration template when appropriate.
+
+    Args:
+        source (pathlib.Path):
+            Repository configuration template.
+        destination (pathlib.Path):
+            Local configuration destination.
+        force (bool):
+            Whether to replace an existing local configuration.
+        dry_run (bool):
+            Whether to report without writing.
+    """
+    if destination.exists() and not force:
+        report_action('skip', destination, note='local configuration exists')
+    else:
+        copy_file(source, destination, dry_run)
+
+def validate_config(target, source):
+    """Validate a native main configuration template.
+
+    Args:
+        target (str):
+            Coding tool name.
+        source (pathlib.Path):
+            Repository configuration template.
+    """
+    if target == 'codex':
+        with source.open('rb') as file:
+            tomllib.load(file)
+    else:
+        with source.open() as file:
+            json.load(file)
+
+def install_target(target, force, dry_run):
+    """Install all managed files for one coding tool.
+
+    Args:
+        target (str):
+            Coding tool name.
+        force (bool):
+            Whether to replace existing main configuration.
+        dry_run (bool):
+            Whether to report without writing.
+    """
+    # Resolve repository templates and the native installation directory
+    target_config = targets[target]
+    destination_root = pathlib.Path.home() / target_config['home']
+    instruction_source, instruction_name = target_config['instructions']
+    config_source, config_name = target_config['config']
+    instruction_source = repository_root / instruction_source
+    config_source = repository_root / config_source
+    validate_config(target, config_source)
+    copy_file(instruction_source, destination_root / instruction_name, dry_run)
+    install_config(config_source, destination_root / config_name, force, dry_run)
+    install_skills(target, destination_root, dry_run)
+    install_subagents(target, target_config, destination_root, dry_run)
+
+@click.command()
+@click.argument('target', type=click.Choice(tuple(targets)))
+@click.option('--dry-run', is_flag=True, help='Show planned changes without writing files.')
+@click.option('--force', is_flag=True, help='Replace all managed files.')
+def command(target, dry_run, force):
+    """Install one personal agent configuration.
+    """
+    try:
+        install_target(target, force, dry_run)
+    except (OSError, ValueError, json.JSONDecodeError, tomllib.TOMLDecodeError,
+            yaml.YAMLError) as ex:
+        raise click.ClickException(str(ex)) from ex
+
+if __name__ == '__main__':
+    command.main()

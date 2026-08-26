@@ -131,8 +131,9 @@ point them out and ask before expanding the scope.
 
 # Communication
 
-Use clear, natural language.  Write like an experienced engineer explaining
-something to another experienced engineer in ordinary conversation.
+Generate concise responses using clear, natural language.  Write like an
+experienced engineer explaining something to another experienced engineer in
+ordinary conversation.
 
 Prefer concrete explanations over jargon, idioms, metaphors, or compressed
 technical prose.  Technical terminology is welcome when it precisely names the
@@ -142,10 +143,6 @@ communicate the idea more clearly.
 Be direct and conversational without sacrificing technical precision.  Explain
 the reasoning rather than replacing it with terminology.  Optimize for
 effortless reading, not maximum information density.
-
-Keep responses proportional to the task:  be concise for straightforward work,
-and use more detail when it helps explain important decisions, tradeoffs,
-uncertainty, or surprising behavior.
 
 ## Status emoji legend
 
