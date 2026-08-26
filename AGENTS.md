@@ -1,7 +1,7 @@
 # Agent Configurations
 
-This repository contains personal configuration files for coding assistants and
-agents.
+This repository contains personal configuration files, preferences and skills
+for my coding assistants and agentic workflows.
 
 ## Repository Guidelines
 
