@@ -1,8 +1,8 @@
 # Agent Configurations
 
-This repository contains the public source configuration for my coding
-assistants and agentic workflows.  It currently supports Codex and Claude while
-keeping shared skills and subagent instructions in one place.
+This repository contains the source configuration for my coding assistants and
+agentic workflows.  It currently supports Codex and Claude while keeping shared
+skills and subagent instructions in one place.
 
 ## Structure
 
@@ -17,7 +17,7 @@ tests/       Installer tests
 
 ## Installation
 
-Use Python 3.11 or newer and install the unpinned dependencies:
+Use Python 3.10 or newer and install the unpinned dependencies:
 
 ```sh
 pip3 install -r requirements.txt
