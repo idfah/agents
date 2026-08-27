@@ -162,6 +162,7 @@ programming language.
 - Prefer descriptive names over short names, except for conventional short
   names in small local contexts, e.g., `ex`, `x`, `y`, `i`, `j`, `src`, `dst`.
 - Do not use double blank lines anywhere.
+- Do not use all-caps variable names, including module globals.
 - Use named keyword arguments when a function call has more than two arguments.
 - Prefer single quotes for all strings.
 - Use double quotes only for docstrings.

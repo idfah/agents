@@ -36,37 +36,6 @@ planned changes without writing.
 The installer requires Python.  Install its unpinned runtime and development
 dependencies with `pip3 install -r requirements.txt`.
 
-## Python Style
-
-- Follow PEP 8 unless a rule below overrides it.
-- Do not use all-caps variable names, including module globals.
-- Do not use type hints.
-- Do not use double blank lines.
-- Target a soft line length of 90 characters and a hard maximum of 100.
-- Prefer single quotes for strings and double quotes for docstrings.
-- Prefer f-strings and format-style interpolation; do not use `%` formatting.
-- Name caught exceptions `ex`.
-- Group standard-library, third-party and local imports, with one blank line
-  between groups.
-- Keep imports alphabetized within each group.
-- Prefer module and namespace imports over direct symbol imports.
-- Do not use wildcard imports.
-- Use `pathlib` for filesystem paths.
-- Single-line comments do not end with a period; multi-line or multi-sentence
-  comments do.
-- Modules, classes and functions must have docstrings.
-- Use Google-style docstrings.  Document argument and return types without
-  adding Python type hints.
-- Put each argument or return name and type on its own line, with the
-  description on the following indented line.
-- Put the closing quote of every docstring on its own line.
-- Use comments to mark logical phases or explain non-obvious intent.  Separate
-  a full-line comment block from preceding code with one blank line.
-- Prefer Click for command-line interfaces.
-- Tests should be focused, readable and cover important behavior.
-- Always run Pylint on modified Python code.  Suppress warnings only with a
-  nearby explanation.
-
 ## Validation
 
 Run the test suite after changing the installer or canonical sources:
