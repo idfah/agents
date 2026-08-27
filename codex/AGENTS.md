@@ -182,48 +182,56 @@ programming language.
 
 - Import example:
 
-    import os
-    import pathlib
-    import sys
+  ```
+  import os
+  import pathlib
+  import sys
 
-    import lightning
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import rasterio as rio
-    import scipy as sp
-    import shapely as shp
-    import torch as th
-    import torchmetrics as tm
+  import lightning
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import rasterio as rio
+  import scipy as sp
+  import shapely as shp
+  import torch as th
+  import torchmetrics as tm
 
-    import skimage as ski
-    import skimage.io as _
+  import skimage as ski
+  import skimage.io as _
+  ```
 
 - Docstring example:
 
-    def function(arg1, arg2, arg3=None):
-        """This is my method. It does something interesting.
+  ```
+  def function(arg1, arg2, arg3=None):
+      """This is my method. It does something interesting.
 
-        Args:
-            arg1 (int):
-                This argument does something.
-            arg2 (list[int]):
-                This argument does something else.
-            arg3 (None | bool):
-                This is an optional keyword argument.
+      Args:
+          arg1 (int):
+              This argument does something.
+          arg2 (list[int]):
+              This argument does something else.
+          arg3 (None | bool):
+              This is an optional keyword argument.
 
-        Returns:
-            (str):
-                This function returns a single string.
-        """
+      Returns:
+          (str):
+              This function returns a single string.
+      """
+  ```
 
 - Single-line comment example:
 
-    # This is a single-line comment
+  ```
+  # This is a single-line comment
+  ```
 
 - Multi-line or multi-sentence comment example:
 
-    # This is a longer comment. It has periods because
-    # it is multiple lines or multiple sentences.
+  ```
+  # This is a longer comment. It has periods because
+  # it is multiple lines or multiple sentences.
+  ```
 
 # Output Expectations
 

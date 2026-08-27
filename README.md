@@ -17,7 +17,7 @@ tests/       Installer tests
 
 ## Installation
 
-Use Python 3.10 or newer and install the unpinned dependencies:
+Use Python 3.11 or newer and install the unpinned dependencies:
 
 ```sh
 pip3 install -r requirements.txt
