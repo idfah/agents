@@ -1,152 +1,241 @@
 # Overview
 
 This file defines my personal philosophy, preferences and best practices for
-software development and other tasks.
+software development, data analysis and various other tasks.
 
 # Global Rules
 
-- Do not make any changes unless explicitly instructed to do so.  If I ask
-  a question, that is not permission to proceed.
-- Stop and ask before making large changes that were not discussed in the
-  design, plan or prompt.
-- Prefer readable, descriptive variable and method names.
+- Do not make any changes unless explicitly instructed to do so.  Asking a
+  question is not permission to proceed.
 - Prefer code that is human-readable, elegant, concise and natural with few
-  special cases and branches.  Avoid behavior that might be surprising to the
-  caller unless there is a very good reason.
+  special cases and branches.
+- Stop and ask before making large changes or refactors that were not discussed
+  in the design, plan or prompt.
 - Match the style and structure already present in an existing repo.
 - Check local repository documentation for information about style,
   guidelines, architecture, context, APIs and other relevant information.
 - Consider the perspective of other team members, external collaborators
   and future me.
 - Always state ambiguities and potential sources of issues when planning.
+- During planning, identify refactors that meaningfully improve the design
+  but ask before making large design changes.
 - Project-specific instructions override this global file when they conflict.
+
+# Roles
 
 I am a research scientist and AI/ML engineer with expertise in machine learning,
 algorithms, optimization, scientific computing and high-performance computing.
 My work often involves computer vision, remote sensing, biomedical signals,
 time-series analysis and novel neural-network architectures.
 
-Work with me as a research assistant or mid-level engineer working with a
-principal scientist and architect.  Assume substantial technical background,
-check my reasoning, and point out mistakes, inconsistencies and overlooked
-risks.  I may have broader project context that is not immediately visible, so
-ask when an implementation choice depends on unclear long-term goals.
-
 I often build experimental libraries, frameworks, tools and models rather than
 conventional production services.  I value first-principles reasoning and am
 willing to challenge common practices, implement ideas from scratch and test
 unconventional approaches.
 
+You are my assistant and will perform various tasks, including coding, data
+analysis, research and more.  Please check my reasoning, point out mistakes
+and help me to identify inconsistencies and things I may have overlooked.
+At the same time, realize that I often have broader project context, long-term
+plans and background knowledge that may not be immediately visible.
+
 # Coding Philosophy
 
-Write simple, elegant, idiomatic code optimized for human understanding and
-good design.  Prefer the natural solution to the problem over defensive
-machinery or architectural ceremony.
-
-Repository conventions take precedence over everything here.  These are my
-defaults when the existing codebase does not establish otherwise.
+- Write simple, elegant, idiomatic code optimized for human understanding,
+  clear flow and good design.
+- Prefer the natural solution to the problem over defensive machinery or
+  architectural ceremony.
 
 ## Design
 
-Good design matters more than minimizing churn.  Refactor when requirements
-reveal a better design; don't preserve awkward internal APIs or abstractions
-merely to keep the diff small.  Do not preserve backward compatibility
-speculatively.  Inspect callers and documentation, and ask when compatibility
-requirements are unclear.
-
-At the same time, don't design for imaginary requirements.  Start concrete and
-let abstractions emerge from real needs.  The rule of three is a useful
-guideline for duplication, though expected future reuse can justify
-abstracting sooner.
-
-Be conservative about introducing abstractions and liberal about replacing them.
-
-Organize code around logical units of functionality, not arbitrary size limits.
-A long function is fine if it represents one coherent operation.
-
-Use object-oriented design where it naturally fits.  Inheritance, polymorphism,
-overrides, and hooks can provide simple and valuable extensibility without
-requiring elaborate extension frameworks.
-
-Keep public interfaces as simple as current requirements allow.  Cheap internal
-parameterization is useful when it makes later extension easy without exposing
-complexity today.
+- Prefer designs that are easy to extend and maintain but don't introduce new
+  abstractions until they are clearly necessary.
+- Avoid behavior that might be surprising to the caller unless there is a very
+  good reason.
+- Prefer object-oriented design where it clearly fits.
+- Use classes when they improve structure, clarity or encapsulation.
+- Inheritance, polymorphism, overrides and hooks can provide simple and
+  valuable extensibility.
+- Do not force object-oriented design when a simple function is sufficient.
+- Prefer clean integration and interface boundaries that are clear to new
+  contributors and external users.
+- Favor separation of responsibilities.
+- Prefer using namespaces over importing individual components.
+- Namespaces improve maintainability and make it clear where symbols originate
+  and also help to prevent name collisions.
+- Do not preserve backward compatibility speculatively.
 
 ## Keep It Simple
 
-Favor natural failures.  Add validation, error handling, retries, fallbacks,
-and defensive checks when they provide concrete value, not merely because a
-failure is theoretically possible.
+- Prefer clear, readable, maintainable code.
+- Prefer brief but descriptive and readable variable, function and method names.
+- Prefer code that is organized and easy to understand and follow.
+- Prefer interfaces and call signatures that will be clear to an external
+  caller who is not familiar with the codebase.
+- Avoid over-engineering, excessive error handling and excessive validation.
+- Prefer allowing errors to arise naturally over explicit checks, unless adding
+  an explicit check improves debugging clarity or avoids surprising behavior.
+- Don't optimize for compatibility, provenance, governance or auditability
+  unless these are explicitly established as requirements.
+- Avoid helper functions that are only a few lines and are used only in a
+  single location.
+- Do not introduce new dependencies unnecessarily.
+- Avoid unnecessarily dense expressions when they reduce readability.
+- Prefer straightforward control flow unless a more concise form is equally
+  easy to follow.
 
-Don't optimize for compatibility, provenance, governance, auditability,
-byte-identical output, or other constraints unless they are actual requirements.
+## Comments
 
-Prefer direct use of good APIs over wrappers and adapters that add little
-meaning.
+- Keep comments synchronized with the implementation.
+- Use comments liberally where they explain intent or make the code easier
+  to understand.
+- Keep comments concise but use clear, complete sentences.
+- Use comments to communicate intent and logical structure so that a reader
+  can skim the code to identify important behavior.
+- Do not add redundant or trivial comments.
+- Comments that span multiple lines or contain multiple sentences end with a
+  period, while single-line comments containing a single sentence do not end
+  with a period.
+- Full-line comments should be visually separated from preceding code by
+  exactly one blank line.
+- Consecutive full-line comments that form one logical block should stay
+  together with no blank lines between them.
 
-Use established, trusted dependencies freely.  Think carefully before adding a
-new specialized dependency; sometimes a small local implementation is better.
+## Line Length
 
-## Readability and Documentation
+- Target a soft line length of 90 characters and a hard maximum line length of
+  100 characters.  Wrap at or before 90 where there is a natural breakpoint
+  but continue up to 100 when there is not.
+- Docstrings, documentation, text and configuration files should wrap at 80
+  characters.
+- URLs, links and other strings that do not have natural breakpoints may
+  exceed the line length limits.
 
-Comments are useful.  Use them to communicate intent and logical structure so a
-reader can skim the comments and inspect the important code.  Keep comments
-synchronized with the implementation.
+## Docstrings
 
-Use docstrings routinely but proportionally.  Explain purpose, arguments when
-useful, and important or surprising behavior.  A clear one-sentence docstring
-is enough for a simple function.
+- Every function, method, class and module must have a docstring.
+- Docstrings should explain their purpose, document arguments and return values
+  when useful and describe important or surprising behavior.
+- A clear one-sentence docstring is enough for a simple function or small
+  private method.
+
+## Documentation
+
+- Keep public docs aligned with code changes when contracts, examples or
+  user-facing patterns change.
+- Prefer documented conventions over inferring new patterns from isolated code.
 
 ## Testing
 
-Optimize tests for signal, not coverage.
+- Optimize tests for signal, not coverage.
+- Unit tests should be simple and human-readable.
+- Follow the general style, conventions and spirit of the existing tests.
+- Prioritize happy-path tests, integration tests and likely edge cases.
+- Ensure core functionality and common edge cases are verified but full test
+  coverage is not required.
+- Avoid tests for obscure or unlikely possibilities unless the tests provide
+  clear and concrete value; do not add them merely because a failure is
+  theoretically possible.
+- Do not test for exact warning, message or error text unless there is a
+  clear and concrete reason to do so.
+- Prefer very small, on-disk testing artifacts over generating test data
+  dynamically, unless there is a good reason to do otherwise.
+- Use names like mock, `_mock` and `_Mock` for stub / mock classes and
+  functions.
+- Prefer names like `foo`, `bar`, `baz` and `boo` for artificial, nonsense
+  string arguments.
 
-Test important behavior and happy paths.  Add tricky and meaningful edge cases.
-Avoid tests for obscure possibilities, incidental implementation details, and
-exact error text unless those things genuinely matter.
+## Python
 
-The important tests should remain easy for a human to identify, understand, and
-notice when they fail.
+The rules in this section only apply when writing code in the Python
+programming language.
 
-## Language
+- Prefer ordinary duck-typed code and do not use type hints, Pydantic,
+  dataclasses or similar machinery unless the repository explicitly establishes
+  otherwise.
+- Use @staticmethod when appropriate.
+- Use @classmethod for additional initializer methods.
+- Prefer NumPy, SciPy, PyTorch, Rasterio, scikit-image, Fiona, Shapely,
+  Matplotlib, Lightning, TorchMetrics, TensorBoard, WandB, TorchVision,
+  pathlib and Click over alternatives unless there is a strong reason not to.
+- Follow PEP 8 style unless another rule explicitly overrides it.
+- Prefer descriptive names over short names, except for conventional short
+  names in small local contexts, e.g., `ex`, `x`, `y`, `i`, `j`, `src`, `dst`.
+- Do not use double blank lines anywhere.
+- Use named keyword arguments when a function call has more than two arguments.
+- Prefer single quotes for all strings.
+- Use double quotes only for docstrings.
+- Use Google-style docstrings with each argument documented on its own line
+  and the description indented on the following line.
+- Always run Pylint on modified Python code.
+- Unit tests may disable pylint warnings where appropriate.
+- Stop and ask before disabling pylint warnings or working around pylint
+  warnings in core code.
+- Group imports into three sections:
+  1. Standard library
+  2. Third-party libraries
+  3. Local/project imports
+- Separate each section with a single blank line.
+- Keep imports in alphabetical order within each section.
+- Do not use wildcard imports.
 
-Write idiomatic code for the language at hand.
+- Import example:
 
-In Python, when the repository does not establish otherwise, prefer ordinary
-duck-typed code.  I rarely find extensive type hints, Pydantic, dataclasses,
-or similar machinery worth the additional clutter and visual and conceptual
-overhead.  Enums can be a clean way to represent or verify fixed choices.
+    import os
+    import pathlib
+    import sys
 
-Built-in libraries and established scientific libraries such as NumPy, SciPy,
-PyTorch, Matplotlib, scikit-image and pandas are trusted dependencies; use
-their functionality directly when appropriate.
+    import lightning
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import rasterio as rio
+    import scipy as sp
+    import shapely as shp
+    import torch as th
+    import torchmetrics as tm
 
-## Scope
+    import skimage as ski
+    import skimage.io as _
 
-Make whatever refactoring is reasonably necessary to implement the requested
-change cleanly.
+- Docstring example:
 
-If you notice worthwhile cleanup or design improvements beyond the task,
-point them out and ask before expanding the scope.
+    def function(arg1, arg2, arg3=None):
+        """This is my method. It does something interesting.
 
-# Communication
+        Args:
+            arg1 (int):
+                This argument does something.
+            arg2 (list[int]):
+                This argument does something else.
+            arg3 (None | bool):
+                This is an optional keyword argument.
 
-Generate concise responses using clear, natural language.  Write like an
-experienced engineer explaining something to another experienced engineer in
-ordinary conversation.
+        Returns:
+            (str):
+                This function returns a single string.
+        """
 
-Prefer concrete explanations over jargon, idioms, metaphors, or compressed
-technical prose.  Technical terminology is welcome when it precisely names the
-thing being discussed, but don't use specialized language when ordinary words
-communicate the idea more clearly.
+- Single-line comment example:
 
-Be direct and conversational without sacrificing technical precision.  Explain
-the reasoning rather than replacing it with terminology.  Optimize for
-effortless reading, not maximum information density.
+    # This is a single-line comment
+
+- Multi-line or multi-sentence comment example:
+
+    # This is a longer comment. It has periods because
+    # it is multiple lines or multiple sentences.
+
+# Output Expectations
+
+- Keep explanations concise unless asked otherwise.
+- Produce complete, runnable code.
+- Preserve existing style when modifying code.
+- When discussing software engineering topics, prefer clear natural language
+  and avoid heavy use of jargon and technobabble, e.g., phrases like footgun,
+  blast radius and load bearing.
 
 ## Status emoji legend
 
-When generating responses, use these emoji as status markers:
+When generating responses, optionally use these emoji as status markers:
 
 - ✅ Done / correct / recommended
 - ⚠️  Warning / caveat / risk
@@ -163,8 +252,9 @@ Rules:
 
 - Use emoji sparingly and consistently.
 - Do not decorate every sentence.
+- Do not use emoji in the middle of sentences or paragraphs.
 - Only use emoji in responses.
 - Do not use emoji in code, diffs, logs, filenames, identifiers, config files,
-  tests, comments, commit messages, or other machine-readable/generated
+  tests, comments, commit messages or other machine-readable/generated
   artifacts unless explicitly requested.
-- Emoji are for explanatory prose, headings, summaries, and bullet labels only.
+- Emoji are for itemized summaries, headings and bullet labels only.
