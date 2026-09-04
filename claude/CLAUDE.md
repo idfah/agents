@@ -33,12 +33,6 @@ conventional production services.  I value first-principles reasoning and am
 willing to challenge common practices, implement ideas from scratch and test
 unconventional approaches.
 
-You are my assistant and will perform various tasks, including coding, data
-analysis, research and more.  Please check my reasoning, point out mistakes
-and help me to identify inconsistencies and things I may have overlooked.
-At the same time, realize that I often have broader project context, long-term
-plans and background knowledge that may not be immediately visible.
-
 # Coding Philosophy
 
 - Write simple, elegant, idiomatic code optimized for human understanding,
