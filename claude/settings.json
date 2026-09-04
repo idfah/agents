@@ -1,5 +1,10 @@
 {
   "theme": "dark-ansi",
+  "spinnerTipsEnabled": false,
+  "effortLevel": "medium",
+  "emojiCompletionEnabled": false,
+  "awaySummaryEnabled": false,
+  "verbose": false,
   "model": "claude-opus-5[1m]",
   "effortLevel": "medium",
   "permissions": {
