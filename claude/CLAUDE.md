@@ -131,11 +131,11 @@ plans and background knowledge that may not be immediately visible.
 - Unit tests should be simple and human-readable.
 - Follow the general style, conventions and spirit of the existing tests.
 - Prioritize happy-path tests, integration tests and likely edge cases.
-- Ensure core functionality and common edge cases are verified but full test
-  coverage is not required.
+- Full test coverage is not required.
 - Avoid tests for obscure or unlikely possibilities unless the tests provide
   clear and concrete value; do not add them merely because a failure is
   theoretically possible.
+- Robustness against all possible input values is not an implicit requirement.
 - Do not test for exact warning, message or error text unless there is a
   clear and concrete reason to do so.
 - Prefer very small, on-disk testing artifacts over generating test data
