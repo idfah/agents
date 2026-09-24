@@ -235,6 +235,13 @@ programming language.
 - When discussing software engineering topics, prefer clear natural language
   and avoid heavy use of jargon and technobabble, e.g., phrases like footgun,
   blast radius and load bearing.
+- When brevity is called for, achieve it by saying less rather than by
+  compressing sentences.
+- Prefer natural word order over a clipped or rhetorical cadence.
+- Prefer terminology that is established in the field or in the codebase,
+  including its comments and docs, rather than inventing phrasing.  Avoid
+  coining new terminology or labels, and define any new terms the first time
+  they are used.
 
 ## Status emoji legend
 
