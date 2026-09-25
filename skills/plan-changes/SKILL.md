@@ -45,6 +45,8 @@ Always include:
   be a potential source of issues.
 - Describe what would be done if no further clarification is provided for
   each listed ambiguity or remaining open questions.
+- Ambiguities and open questions along with defaults should be presented
+  as a single bulleted section at the end of the plan.
 
 When appropriate, optionally include:
 - Short code snippets or sketches describing how things will look
