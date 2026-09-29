@@ -13,6 +13,11 @@ network_access = true
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 
+[tui]
+alternate_screen = "never"
+show_tooltips = false
+status_line = ["model-with-reasoning", "context-used", "current-dir", "git-branch", "thread-name"]
+
 [agents]
 max_threads = 12
 max_depth = 1
