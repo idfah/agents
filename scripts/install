@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install the repository's Codex or Claude configuration.
+"""Install the repository's coding assistant configuration.
 """
 import json
 import pathlib
@@ -22,6 +22,12 @@ targets = {
         'home': '.codex',
         'instructions': ('codex/AGENTS.md', 'AGENTS.md'),
         'subagent_suffix': '.toml',
+    },
+    'copilot': {
+        'config': ('copilot/settings.json', 'settings.json'),
+        'home': '.copilot',
+        'instructions': ('copilot/copilot-instructions.md', 'copilot-instructions.md'),
+        'subagent_suffix': '.agent.md',
     },
 }
 
@@ -56,16 +62,24 @@ def validate_subagent(source, metadata, body):
         raise ValueError(f'`{source}` name must match its filename.')
 
     require_string_fields(source, metadata, ('description',))
-    for tool in ('claude', 'codex'):
+    for tool in targets:
         if not isinstance(metadata.get(tool), dict):
             raise ValueError(f'`{source}` has no `{tool}` mapping.')
 
     # Validate tool-specific metadata
     require_string_fields(source, metadata['claude'], ('model', 'effort'))
     require_string_fields(source, metadata['codex'], ('model', 'reasoning_effort'))
+    require_string_fields(source, metadata['copilot'], ('model', 'reasoning_effort'))
 
     if not isinstance(metadata['claude'].get('tools'), list):
         raise ValueError(f'`{source}` has no `claude.tools` list.')
+
+    if not isinstance(metadata['copilot'].get('tools'), list):
+        raise ValueError(f'`{source}` has no `copilot.tools` list.')
+
+    for field in ('strict-tools-list', 'include-custom-instructions'):
+        if metadata['copilot'].get(field) is not True:
+            raise ValueError(f'`{source}` must enable `copilot.{field}`.')
 
     if metadata['codex'].get('sandbox_mode') != 'read-only':
         raise ValueError(f'`{source}` must use a read-only Codex sandbox.')
@@ -168,6 +182,37 @@ def render_codex_subagent(metadata, body):
 
     return rendered
 
+def render_copilot_subagent(metadata, body):
+    """Render one canonical subagent as Copilot-native Markdown.
+
+    Args:
+        metadata (dict):
+            Canonical subagent frontmatter.
+        body (str):
+            Canonical subagent instructions.
+
+    Returns (str):
+        Copilot-native Markdown configuration.
+    """
+    copilot = metadata['copilot']
+    native_metadata = {
+        'name': metadata['name'],
+        'description': metadata['description'],
+        'model': copilot['model'],
+        'reasoning-effort': copilot['reasoning_effort'],
+        'tools': copilot['tools'],
+        'strict-tools-list': copilot['strict-tools-list'],
+        'include-custom-instructions': copilot['include-custom-instructions'],
+    }
+    frontmatter = yaml.safe_dump(
+        native_metadata,
+        allow_unicode=True,
+        sort_keys=False,
+        width=80,
+    ).rstrip()
+
+    return f'---\n{frontmatter}\n---\n\n{body}\n'
+
 def report_action(action, destination, note=None):
     """Report one planned or completed installation action.
 
@@ -247,8 +292,8 @@ def install_skills(target, destination_root, dry_run):
 
             relative_path = source.relative_to(skill_directory)
 
-            # Claude does not use Codex skill metadata
-            if target == 'claude' and relative_path == pathlib.Path('agents/openai.yaml'):
+            # Only Codex uses this native skill metadata
+            if target != 'codex' and relative_path == pathlib.Path('agents/openai.yaml'):
                 continue
 
             destination = destination_root / 'skills' / skill_directory.name / relative_path
@@ -272,6 +317,8 @@ def install_subagents(target, target_config, destination_root, dry_run):
 
         if target == 'claude':
             content = render_claude_subagent(metadata, body)
+        elif target == 'copilot':
+            content = render_copilot_subagent(metadata, body)
         else:
             content = render_codex_subagent(metadata, body)
 

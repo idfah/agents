@@ -8,11 +8,13 @@ repository.
 ## Repository Structure
 
 - `codex/` contains Codex instructions and a complete baseline `config.toml`.
-- `claude/` contains Claude instructions and a complete baseline `settings.json`.
+- `claude/` contains Claude instructions and a complete baseline
+  `settings.json`.
+- `copilot/` contains Copilot CLI instructions and a baseline `settings.json`.
 - `skills/` contains shared skills.  Codex-specific `agents/openai.yaml` files
   remain co-located with their corresponding skills.
 - `subagents/` contains canonical Markdown subagent role descriptions with
-  separate `claude` and `codex` configuration sections.
+  separate `claude`, `codex` and `copilot` configuration sections.
 - `scripts/install` installs one tool's configuration.
 - `tests/` contains focused installer tests.
 
@@ -24,8 +26,9 @@ files and metadata sections.
 
 ## Installation
 
-Run `scripts/install codex` or `scripts/install claude`.  The installer uses
-`~/.codex` and `~/.claude`, respectively.
+Run `scripts/install codex`, `scripts/install claude` or
+`scripts/install copilot`.
+The installer uses `~/.codex`, `~/.claude` and `~/.copilot`, respectively.
 
 Normal installation overwrites managed instructions, same-named skills and
 same-named subagents.  It leaves unrelated and obsolete local files untouched.

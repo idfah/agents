@@ -12,6 +12,12 @@ codex:
   model: gpt-5.6-sol
   reasoning_effort: high
   sandbox_mode: read-only
+copilot:
+  model: gpt-5.6-sol
+  reasoning_effort: high
+  tools: [read, search, execute, web]
+  strict-tools-list: true
+  include-custom-instructions: true
 ---
 
 Act and review from the perspective of a seasoned machine learning engineer.

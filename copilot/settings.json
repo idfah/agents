@@ -1,0 +1,16 @@
+{
+  "model": "gpt-6.1-sol",
+  "effortLevel": "medium",
+  "defaultMode": "interactive",
+  "defaultPermissionMode": "assisted",
+  "banner": "never",
+  "showTipsOnStartup": false,
+  "mouse": false,
+  "memory": true,
+  "sandbox": {
+    "enabled": true,
+    "addCurrentWorkingDirectory": true,
+    "allowDevToolAccess": true,
+    "allowBypass": true
+  }
+}

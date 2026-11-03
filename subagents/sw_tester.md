@@ -12,6 +12,12 @@ codex:
   model: gpt-5.5
   reasoning_effort: medium
   sandbox_mode: read-only
+copilot:
+  model: gpt-5.5
+  reasoning_effort: medium
+  tools: [read, search, execute, web]
+  strict-tools-list: true
+  include-custom-instructions: true
 ---
 
 Act as a software testing expert and focus narrowly on how functionality is

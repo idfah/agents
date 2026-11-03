@@ -7,6 +7,7 @@ import pathlib
 import tomllib
 
 import click.testing
+import pytest
 import yaml
 
 # Load the extensionless executable for direct Click invocation
@@ -74,37 +75,97 @@ def test_claude_install_renders_native_agents(monkeypatch, tmp_path):
     assert not (claude_home / 'skills/context-warmup/agents/openai.yaml').exists()
     assert (claude_home / 'skills/context-warmup/SKILL.md').is_file()
 
-def test_repeat_install_reports_unchanged_files(monkeypatch, tmp_path):
+@pytest.mark.parametrize('target', ('claude', 'codex', 'copilot'))
+def test_repeat_install_reports_unchanged_files(monkeypatch, tmp_path, target):
     """Repeating an installation should report unchanged files, not replacements.
     """
-    run_command(monkeypatch, tmp_path, 'codex')
-    installed_agent = tmp_path / '.codex/agents/algorithms_expert.toml'
+    run_command(monkeypatch, tmp_path, target)
+    suffix = install.targets[target]['subagent_suffix']
+    installed_agent = tmp_path / f'.{target}/agents/algorithms_expert{suffix}'
     installed_agent.write_text('local changes\n')
-    assert 'replace' in run_command(monkeypatch, tmp_path, 'codex').output
-    result = run_command(monkeypatch, tmp_path, 'codex')
+    assert 'replace' in run_command(monkeypatch, tmp_path, target).output
+    result = run_command(monkeypatch, tmp_path, target)
     assert 'unchanged' in result.output
     assert 'replace' not in result.output
 
-def test_existing_main_configuration_requires_force(monkeypatch, tmp_path):
+@pytest.mark.parametrize('target', ('claude', 'codex', 'copilot'))
+def test_existing_main_configuration_requires_force(monkeypatch, tmp_path, target):
     """Existing main configuration should change only when forced.
     """
-    run_command(monkeypatch, tmp_path, 'claude')
-    settings = tmp_path / '.claude/settings.json'
-    settings.write_text('{"local": true}\n')
-    result = run_command(monkeypatch, tmp_path, 'claude')
-    assert settings.read_text() == '{"local": true}\n'
+    run_command(monkeypatch, tmp_path, target)
+    source, name = install.targets[target]['config']
+    settings = tmp_path / f'.{target}' / name
+    settings.write_text('local settings\n')
+    result = run_command(monkeypatch, tmp_path, target)
+    assert settings.read_text() == 'local settings\n'
     assert 'local configuration exists' in result.output
-    run_command(monkeypatch, tmp_path, '--force', 'claude')
-    assert settings.read_text() == (
-        install.repository_root / 'claude/settings.json'
-    ).read_text()
+    run_command(monkeypatch, tmp_path, '--force', target)
+    assert settings.read_text() == (install.repository_root / source).read_text()
 
-def test_dry_run_makes_no_changes(monkeypatch, tmp_path):
+@pytest.mark.parametrize('target', ('claude', 'codex', 'copilot'))
+def test_dry_run_makes_no_changes(monkeypatch, tmp_path, target):
     """Dry-run should report planned changes without creating files.
     """
-    result = run_command(monkeypatch, tmp_path, '--dry-run', 'codex')
-    assert str(tmp_path / '.codex/AGENTS.md') in result.output
-    assert not (tmp_path / '.codex').exists()
+    result = run_command(monkeypatch, tmp_path, '--dry-run', target)
+    _, name = install.targets[target]['instructions']
+    assert str(tmp_path / f'.{target}' / name) in result.output
+    assert not (tmp_path / f'.{target}').exists()
+
+def test_copilot_install_renders_and_refreshes_managed_files(monkeypatch, tmp_path):
+    """Copilot should render all roles and refresh only its managed files.
+    """
+    run_command(monkeypatch, tmp_path, 'copilot')
+    copilot_home = tmp_path / '.copilot'
+    for source in sorted((install.repository_root / 'subagents').glob('*.md')):
+        canonical, body = install.read_subagent(source)
+        installed_agent = copilot_home / 'agents' / f'{source.stem}.agent.md'
+        frontmatter, installed_body = installed_agent.read_text()[4:].split(
+            '\n---\n', maxsplit=1,
+        )
+        metadata = yaml.safe_load(frontmatter)
+        assert metadata['name'] == source.stem
+        assert metadata['model'] == canonical['copilot']['model']
+        assert metadata['reasoning-effort'] == canonical['copilot']['reasoning_effort']
+        assert metadata['tools'] == ['read', 'search', 'execute', 'web']
+        assert metadata['strict-tools-list'] is True
+        assert metadata['include-custom-instructions'] is True
+        assert 'codex' not in metadata
+        assert 'claude' not in metadata
+        assert installed_body.strip() == body
+
+    instructions = copilot_home / 'copilot-instructions.md'
+    skill = copilot_home / 'skills/context-warmup/SKILL.md'
+    agent = copilot_home / 'agents/algorithms_expert.agent.md'
+    local_agent = copilot_home / 'agents/local.agent.md'
+    assert not (copilot_home / 'skills/context-warmup/agents/openai.yaml').exists()
+    for managed_file in (instructions, skill, agent):
+        managed_file.write_text('local changes\n')
+    local_agent.write_text('local agent\n')
+    run_command(monkeypatch, tmp_path, 'copilot')
+    assert instructions.read_text() == (
+        install.repository_root / 'copilot/copilot-instructions.md'
+    ).read_text()
+    assert skill.read_text() == (
+        install.repository_root / 'skills/context-warmup/SKILL.md'
+    ).read_text()
+    assert agent.read_text() != 'local changes\n'
+    assert local_agent.read_text() == 'local agent\n'
+
+def test_copilot_renderer_uses_copilot_model_and_reasoning():
+    """Copilot rendering should use its own model and reasoning metadata.
+    """
+    canonical, body = install.read_subagent(
+        install.repository_root / 'subagents/algorithms_expert.md',
+    )
+    canonical['codex']['model'] = 'gpt-5.6-sol'
+    canonical['codex']['reasoning_effort'] = 'high'
+    canonical['copilot']['model'] = 'gpt-6.1-sol'
+    canonical['copilot']['reasoning_effort'] = 'medium'
+    rendered = install.render_copilot_subagent(canonical, body)
+    frontmatter = rendered[4:].split('\n---\n', maxsplit=1)[0]
+    metadata = yaml.safe_load(frontmatter)
+    assert metadata['model'] == 'gpt-6.1-sol'
+    assert metadata['reasoning-effort'] == 'medium'
 
 def test_invalid_subagent_reports_a_click_error(monkeypatch, tmp_path):
     """Invalid canonical subagents should produce a clear user-facing error.

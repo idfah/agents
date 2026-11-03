@@ -12,6 +12,12 @@ codex:
   model: gpt-5.6-terra
   reasoning_effort: medium
   sandbox_mode: read-only
+copilot:
+  model: gpt-5.6-terra
+  reasoning_effort: medium
+  tools: [read, search, execute, web]
+  strict-tools-list: true
+  include-custom-instructions: true
 ---
 
 Act and review, as instructed, from the perspective of an expert on

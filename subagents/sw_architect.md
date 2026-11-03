@@ -12,6 +12,12 @@ codex:
   model: gpt-5.6-sol
   reasoning_effort: medium
   sandbox_mode: read-only
+copilot:
+  model: gpt-5.6-sol
+  reasoning_effort: medium
+  tools: [read, search, execute, web]
+  strict-tools-list: true
+  include-custom-instructions: true
 ---
 
 Focus solely on software design and architecture.
