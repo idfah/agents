@@ -5,7 +5,7 @@
   "defaultPermissionMode": "assisted",
   "banner": "never",
   "showTipsOnStartup": false,
-  "mouse": false,
+  "mouse": true,
   "memory": true,
   "sandbox": {
     "enabled": true,
