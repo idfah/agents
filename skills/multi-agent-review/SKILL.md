@@ -1,7 +1,8 @@
 ---
 name: multi-agent-review
 description: Use multiple subagents to perform an in-depth review.  Use only
-  when asked to perform a multi-agent review.
+  when asked to perform a multi-agent review.  Use a more specific review
+  skill when one matches the request.
 ---
 
 # Multi-Agent Review
@@ -11,6 +12,10 @@ subagents will perform narrowly scoped reviews and the top-level agent
 will collate and summarize their responses.
 
 If invoked without a specific target, review the current working changeset.
+
+When a specialized review skill applies, use that skill instead of this one.
+In particular, use `multi-agent-paper-review` for multi-agent academic paper
+reviews; do not combine the two workflows.
 
 ## Instructions
 
