@@ -21,3 +21,9 @@ status_line = ["model-with-reasoning", "context-used", "current-dir", "git-branc
 [agents]
 max_threads = 12
 max_depth = 1
+
+[analytics]
+enabled = false
+
+[feedback]
+enabled = false

@@ -223,7 +223,7 @@ programming language.
 - Multi-line or multi-sentence comment example:
 
   ```
-  # This is a longer comment. It has periods because
+  # This is a longer comment.  It has periods because
   # it is multiple lines or multiple sentences.
   ```
 
