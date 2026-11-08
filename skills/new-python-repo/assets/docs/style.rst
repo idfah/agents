@@ -44,8 +44,9 @@ Avoid::
         x, y, min_value=0., max_value=10.,
     )
 
-Use trailing commas in wrapped calls.  A long function or method signature
-wraps horizontally rather than placing one argument on every line.
+Use trailing commas when the closing parenthesis is on its own line.  A long
+function or method signature wraps horizontally rather than placing one
+argument on every line.
 
 Prefer::
 
@@ -58,6 +59,11 @@ Names, Imports and Encapsulation
 Use ``snake_case`` for variables at every scope, including module globals and
 constants.  Use ``CamelCase`` for classes and enums.  This deliberately differs
 from PEP 8's all-caps convention for constants.
+
+Prefer descriptive names, allowing conventional short names when their
+meaning is clear in context.  Examples include mathematical symbols and
+indices, ``ex`` for exceptions, ``fh`` or ``fp`` for file handles, ``ax`` or
+``fig`` for plotting objects and ``src`` or ``dst`` for source and destination.
 
 Use a leading underscore for module-private classes and for attributes whose
 names or behavior may change.  It is guidance to callers rather than strict
@@ -119,6 +125,8 @@ reStructuredText formatting, keeps prose at 80 characters and places each
 argument description below its name and type.  ``Notes`` and ``References``
 are optional sections.
 
+Place closing docstring quotes on a separate line.
+
 .. code-block:: python
 
     def method_or_function_signature(self, value1, value2, method='fixed'):
@@ -164,7 +172,9 @@ Prefer::
 Documentation Prose
 -------------------
 
-Write documentation in reStructuredText.  Wrap prose at 80 characters.  Use
-sentence case, two spaces after sentence-ending periods and no Oxford commas.
+Write Sphinx documentation under ``docs/`` in reStructuredText.  Other
+repository documentation may use Markdown.  Wrap prose at 80 characters.
+Use title case for headings, two spaces after sentence-ending periods and
+no Oxford commas.
 Follow existing documentation patterns for Sphinx page structure and
 cross-references.

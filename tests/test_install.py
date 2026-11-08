@@ -76,6 +76,23 @@ def test_claude_install_renders_native_agents(monkeypatch, tmp_path):
     assert (claude_home / 'skills/context-warmup/SKILL.md').is_file()
 
 @pytest.mark.parametrize('target', ('claude', 'codex', 'copilot'))
+def test_scaffolding_skill_installs_all_assets(monkeypatch, tmp_path, target):
+    """Install templates, including dotfiles, and filter native skill metadata.
+    """
+    run_command(monkeypatch, tmp_path, target)
+    source = install.repository_root / 'skills/new-python-repo'
+    destination = tmp_path / f'.{target}/skills/new-python-repo'
+    for asset in (source / 'assets').rglob('*'):
+        if asset.is_file():
+            installed = destination / asset.relative_to(source)
+            assert installed.read_bytes() == asset.read_bytes()
+
+    assert (destination / 'assets/.pylintrc').is_file()
+    assert (destination / 'assets/.gitignore').is_file()
+    assert (destination / 'SKILL.md').read_bytes() == (source / 'SKILL.md').read_bytes()
+    assert (destination / 'agents/openai.yaml').exists() == (target == 'codex')
+
+@pytest.mark.parametrize('target', ('claude', 'codex', 'copilot'))
 def test_repeat_install_reports_unchanged_files(monkeypatch, tmp_path, target):
     """Repeating an installation should report unchanged files, not replacements.
     """

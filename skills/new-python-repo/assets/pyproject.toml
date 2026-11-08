@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{distribution_name}}"
+version = "0.0.0"
+description = "{{description}}"
+readme = "README.md"
+requires-python = ">={{python_version}}"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "pylint",
+    "pytest",
+    "sphinx",
+]
+
+[tool.setuptools.packages.find]
+include = ["{{package_name}}", "{{package_name}}.*"]
+namespaces = false

@@ -1,0 +1,4 @@
+interface:
+  display_name: "New Python Repo"
+  short_description: "Create and adapt Python repository scaffolding"
+  default_prompt: "Use $new-python-repo to scaffold this Python project around existing content."

@@ -1,0 +1,21 @@
+# Local working documents and virtual environment
+/context/
+/venv/
+
+# Python and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.pylint.d/
+
+# Packaging and documentation output
+*.egg-info/
+/build/
+/dist/
+/docs/_build/
+
+# Local editor artifacts
+*.swp
+*.swo
+*~
+.DS_Store
