@@ -102,8 +102,8 @@ unconventional approaches.
 - Target a soft line length of 90 characters and a hard maximum line length of
   100 characters.  Wrap at or before 90 where there is a natural breakpoint
   but continue up to 100 when there is not.
-- Docstrings, documentation, text and configuration files should wrap at 80
-  characters.
+- Docstrings and documentation prose should wrap at 80 characters.
+- Code blocks in documentation follow the code limits above.
 - URLs, links and other strings that do not have natural breakpoints may
   exceed the line length limits.
 
@@ -146,9 +146,11 @@ unconventional approaches.
 The rules in this section only apply when writing code in the Python
 programming language.
 
-- Prefer ordinary duck-typed code and do not use type hints, Pydantic,
-  dataclasses or similar machinery unless the repository explicitly establishes
-  otherwise.
+- Prefer ordinary duck-typed code.
+- Do not add type annotations unless they support an actual integration or
+  workflow.  Otherwise, document useful type information in docstrings.
+- Do not use Pydantic, dataclasses or similar machinery unless the repository
+  explicitly establishes otherwise.
 - Use @staticmethod when appropriate.
 - Use @classmethod for additional initializer methods.
 - Prefer NumPy, SciPy, PyTorch, Rasterio, scikit-image, Fiona, Shapely,
@@ -159,9 +161,11 @@ programming language.
   names in small local contexts, e.g., `ex`, `x`, `y`, `i`, `j`, `src`, `dst`.
 - Do not use double blank lines anywhere.
 - Do not use all-caps variable names, including module globals.
-- Use named keyword arguments when a function call has more than two arguments.
+- For calls with several arguments, prefer keywords when they clarify the
+  argument's meaning or avoid reliance on order.  Short, obvious positional
+  arguments remain appropriate.
 - Prefer single quotes for all strings.
-- Use double quotes only for docstrings.
+- Use double quotes for docstrings or when they improve readability.
 - Use Google-style docstrings with each argument documented on its own line
   and the description indented on the following line.
 - Always run Pylint on modified Python code.
