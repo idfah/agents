@@ -115,23 +115,47 @@ markup where it improves clarity.
 Comments
 --------
 
-Use comments liberally when they explain intent or non-obvious behavior.  Begin
-comments with a capital letter.  A single-sentence comment has no ending period.
+Use comments to make the main steps easy to follow without studying each
+expression.  Explain purpose and reasoning that are not apparent from the code.
+Provide more explanation for numerical computations, algorithms and other code
+that requires specialized knowledge, even when the code is short.  Brief
+comments describing a logical block can help readers follow the flow; they are
+optional for straightforward code.  Avoid merely restating individual
+statements, and keep comments synchronized with the implementation.
+
+Keep comments concise, use clear, complete sentences and begin with a capital
+letter.  A single-line, single-sentence comment has no ending period.
 Multi-sentence or multi-line comments use ending periods and two spaces after
-each period.
+each period.  Wrap sentences across lines as needed; split sentences where
+the ideas warrant it rather than merely to satisfy line length.
+
+For example::
+
+    # This is a single-line comment
+
+    # This comment spans multiple lines even though it contains
+    # only one sentence.
 
 Separate full-line comments from preceding code with exactly one blank line.
 Keep consecutive comments that form one logical block together without blank
 lines between them.
 
-Prefer::
+For example, explain both the computation and the reason for a correction::
 
-    # This is a single line comment
+    # Compute the FFT for real-valued input and normalize its squared magnitude
+    # to obtain a power spectral density in signal units squared per Hz.
+    spectrum = np.fft.rfft(s, axis=0)
+    power = np.abs(spectrum)**2 / (samp_rate * num_obs)
 
-    # This comment has multiple sentences.  Use a period and two spaces.
+    # Double power except at DC and Nyquist when present.  This accounts for
+    # the equal power in negative-frequency bins omitted by the real FFT.
+    if num_obs % 2 == 0:
+        power[1:-1] *= 2
+    else:
+        power[1:] *= 2
 
-    # This is a very long comment.  It explains something in depth and
-    # has multiple lines and multiple sentences.  We use periods here too.
+Related operations may share one explanatory comment, as above, or form
+separate commented blocks when that makes the steps easier to follow.
 
 Inline Code in Comments and Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,8 +215,8 @@ Prefer ``pathlib`` for local filesystem paths.
 Formatting
 ----------
 
-Line Length and Whitespace
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Line Length
+~~~~~~~~~~~
 
 Soft-wrap Python code near 90 characters where there is a natural breakpoint.
 Do not exceed 100 characters unless a URL or another unbreakable string makes
@@ -200,8 +224,40 @@ that necessary.  Pylint permits 101 characters to allow this judgment.
 Docstrings and documentation prose wrap at 80 characters.  Code examples in
 documentation follow the Python code limits.
 
+Whitespace and Logical Blocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Use one blank line between top-level definitions, methods and logical
 sections of code.  Do not use double blank lines in Python.
+
+Organize code into small, coherent logical blocks separated by blank lines,
+even when comments are unnecessary.  Let the task determine block size.  Use
+blank lines to separate compound statements from subsequent work and to
+distinguish longer conditional branches.  Keep short branches compact.
+Use judgment for cases in between.
+
+Use a conditional expression for a simple value selection when it is clear::
+
+    status = 'online' if connected else 'offline'
+
+Keep short action branches compact::
+
+    if connected:
+        send_message(message)
+    else:
+        queue_message(message)
+
+For a longer operation, separate the branches and the work that follows::
+
+    if path.exists():
+        text = path.read_text()
+        records = json.loads(text)
+        records = [record for record in records if record['active']]
+
+    else:
+        records = []
+
+    num_records = len(records)
 
 Strings
 ~~~~~~~

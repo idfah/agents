@@ -63,7 +63,8 @@ unconventional approaches.
 
 - Prefer clear, readable, maintainable code.
 - Prefer brief but descriptive and readable variable, function and method names.
-- Prefer code that is organized and easy to understand and follow.
+- Organize code into small, coherent logical blocks separated by blank lines,
+  even when comments are unnecessary.  Let the task determine block size.
 - Prefer interfaces and call signatures that will be clear to an external
   caller who is not familiar with the codebase.
 - Avoid over-engineering, excessive error handling and excessive validation.
@@ -81,12 +82,15 @@ unconventional approaches.
 ## Comments
 
 - Keep comments synchronized with the implementation.
-- Use comments liberally where they explain intent or make the code easier
-  to understand.
+- Use comments to make the main steps easy to follow without studying each
+  expression.  Explain purpose and reasoning that are not apparent from
+  the code.
+- Provide more explanation for numerical computations, algorithms and other
+  code that requires specialized knowledge, even when the code is short.
+- Brief comments describing a logical block are useful when they help readers
+  follow the flow.  They are optional for straightforward code; avoid merely
+  restating individual statements.
 - Keep comments concise but use clear, complete sentences.
-- Use comments to communicate intent and logical structure so that a reader
-  can skim the code to identify important behavior.
-- Do not add redundant or trivial comments.
 - Comments that span multiple lines or contain multiple sentences end with a
   period, while single-line comments containing a single sentence do not end
   with a period.
@@ -157,6 +161,8 @@ programming language.
 - Follow PEP 8 style unless another rule explicitly overrides it.
 - Prefer descriptive names over short names, except for conventional short
   names in small local contexts, e.g., `ex`, `x`, `y`, `i`, `j`, `src`, `dst`.
+- Use blank lines to separate compound statements from subsequent work and
+  to distinguish longer conditional branches.  Keep short branches compact.
 - Do not use double blank lines anywhere.
 - Do not use all-caps variable names, including module globals.
 - For calls with several arguments, prefer keywords when they clarify the
