@@ -237,6 +237,17 @@ programming language.
   # it is multiple lines or multiple sentences.
   ```
 
+# Commit Messages
+
+- Follow established repository commit-message conventions unless instructed
+  otherwise.
+- For straightforward changes, a single summary line is sufficient.
+- For larger or more complex changes, write a high-level summary sentence,
+  followed by a blank line and a concise `*`-bulleted list of meaningful changes.
+- Check the diff against the message to ensure significant changes are
+  accounted for.  Describe related edits together rather than listing every
+  file or individual edit.
+
 # Output Expectations
 
 - Keep explanations concise unless asked otherwise.

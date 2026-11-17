@@ -23,6 +23,26 @@ Run tests, with lint as a prerequisite:
 The initial smoke test checks package imports.  See :doc:`style` for coding
 conventions.
 
+Commit Messages
+---------------
+
+For straightforward changes, a single summary line is sufficient.
+For larger or more complex changes, write a high-level summary sentence,
+followed by a blank line and a concise ``*``-bulleted list of meaningful
+changes.
+
+Check the diff against the message to ensure significant changes are accounted
+for.  Describe related edits together rather than listing every file or
+individual edit.
+
+For example::
+
+    Correct normalization in PSD computation.
+
+    * Divide by sampling rate to express the density in power per Hz.
+    * Clarify documentation of the returned values.
+    * Update call sites to remove their sampling-rate division.
+
 Documentation
 -------------
 
