@@ -249,6 +249,8 @@ programming language.
 - Check the diff against the message to ensure significant changes are
   accounted for.  Describe related edits together rather than listing every
   file or individual edit.
+- Do not include any agent attribution messages, such as "co-authored by copilot",
+  unless explicitly instructed to do so.
 
 # Output Expectations
 
