@@ -4,6 +4,14 @@ import torch as th
 
 class _GroupNorm(th.nn.GroupNorm):
     """Group normalization with tapered groups for small channel counts.
+
+    Input:
+        input (torch.Tensor):
+            Tensor with shape ``(N, num_chans, *)``, where ``*`` denotes zero
+            or more spatial dimensions.
+
+    Output:
+        Normalized tensor with the same shape as the input.
     """
     def __init__(self, num_chans, num_groups=None, **kwargs):
         """Initialize group normalization with a tapered default group count.

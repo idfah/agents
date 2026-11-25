@@ -61,6 +61,11 @@ def forward(self, x):
 
 ## Module design
 
+For `th.nn.Module` subclasses, document the `module(...)` interface in the
+class docstring under `Input` and `Output`. Include call-time arguments,
+supported tensor shapes, and how output shapes relate to the inputs. Keep
+`forward` docstrings brief and document constructor arguments in `__init__`.
+
 Use `th.nn.Sequential` for straight pipelines and `th.nn.ModuleList` when
 `forward` does work between layers. Prefer a named module over a factory or
 `partial` when initialization is complex or worth reusing, or when the block
@@ -86,3 +91,7 @@ project requires it.
   gain and zero bias.
 - [`_Conv2d`](assets/conv2d.py) uses same padding and the same initialization.
 - [`_GroupNorm`](assets/group_norm.py) uses a tapered default group count.
+- [`_Downsample`](assets/downsample.py) downsamples by a factor of two with a
+  binomial anti-aliasing filter.
+- [`_Upsample`](assets/upsample.py) uses bilinear interpolation and documents
+  its call-time `size` argument in the class docstring.

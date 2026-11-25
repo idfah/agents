@@ -4,6 +4,15 @@ import torch as th
 
 class _Conv2d(th.nn.Conv2d):
     """Same-padded convolution with Kaiming-normal initialization.
+
+    Input:
+        input (torch.Tensor):
+            Tensor with shape ``(N, in_chans, H, W)`` for batched input or
+            ``(in_chans, H, W)`` for unbatched input.
+
+    Output:
+        Tensor with shape ``(N, out_chans, H, W)`` or ``(out_chans, H, W)``,
+        respectively.  The spatial dimensions are preserved.
     """
     def __init__(self, in_chans, out_chans, kernel_size, bias=True):
         """Initialize a same-padded convolutional layer.
