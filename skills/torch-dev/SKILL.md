@@ -82,6 +82,29 @@ follow the module across devices, or for tensor state that needs to be saved
 and restored through `state_dict`. Compute values that change with each call
 in `forward`.
 
+### Runtime and numerical behavior
+
+When designing a module or changing its computation, briefly consider the
+following where relevant:
+
+- **GPU cost.** At realistic shapes, consider memory access patterns and the
+  cost of copies, layout changes, and temporary tensors. Weigh in-place
+  updates against aliasing and autograd.
+- **Activation scale.** Consider how residual additions, nonlinearities, and
+  gates affect activation scale, especially when a block repeats many times.
+- **Numerical stability.** Prefer stable formulations when available. Pay
+  attention to extreme values, small denominators, cancellation, and reductions
+  where they matter to the computation.
+- **Dtype.** Consider the project's FP32, FP16, and BF16 execution modes.
+  Choose the precision of sensitive intermediates deliberately and preserve
+  the expected output dtype.
+- **Device placement.** Create tensors on the device where they will be used.
+  Prefer `_like` helpers when they give the intended shape, device, and dtype.
+
+Follow project conventions and handle straightforward issues as part of the
+edit. Raise a concern when you can identify a concrete effect on correctness,
+training behavior, runtime, or memory that calls for a design decision.
+
 ## Bundled layers
 
 Copy a bundled implementation as written when it fits and adapt it when the
