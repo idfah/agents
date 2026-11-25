@@ -69,12 +69,14 @@ Use double quotes, begin the text immediately after the opening quotes and
 place closing docstring quotes on a separate line.  Use reStructuredText
 markup where it improves clarity.
 
+Start the first import immediately after the module docstring and the first
+method immediately after the class docstring.
+
 .. code-block:: python
 
     class ValueCalculator:
         """Calculate values using a fixed offset and divisor.
         """
-
         def __init__(self, offset, divisor=42):
             """Initialize the calculator.
 
@@ -316,23 +318,26 @@ Prefer::
 
     function(x, y, min_value=0., max_value=10.)
 
-Arguments may begin on the line after the opening parenthesis.  Place the
-closing parenthesis on its own line when that improves readability, and use
-a trailing comma when doing so.
+Arguments may begin on the line after the opening parenthesis.  For a simple
+wrapped call, close the call on the argument line if all arguments fit there.
+When the arguments span multiple lines, use a trailing comma and put the
+closing parenthesis on its own line.
 
 Acceptable::
 
     long_function_name(
         x, y, min_value=0., max_value=10.)
 
-    long_function_name(
-        x, y, min_value=0., max_value=10.,
-    )
-
     function(
         x, y,
         min_value=0.,
         max_value=10.,
+    )
+
+Avoid::
+
+    long_function_name(
+        x, y, min_value=0., max_value=10.,
     )
 
 Keep nested calls readable by giving their closing parentheses separate lines

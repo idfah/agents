@@ -1,0 +1,6 @@
+interface:
+  display_name: "PyTorch Development"
+  short_description: "Apply PyTorch coding and layer conventions"
+  default_prompt: "Use $torch-dev when editing this PyTorch code."
+policy:
+  allow_implicit_invocation: true
