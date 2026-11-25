@@ -101,7 +101,7 @@ method immediately after the class docstring.
                     The result of the calculation.
 
             Raises:
-                ZeroDivisionError:
+                (ZeroDivisionError):
                     If ``divisor`` is zero.
 
             Notes:
